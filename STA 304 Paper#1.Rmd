@@ -17,6 +17,9 @@ library(opendatatoronto)
 library(dplyr)
 library(tidyverse)
 library(kableExtra)
+library(GGally)
+library(ggplot2)
+library(car)
 
 # get package
 package <- show_package("4ef82789-e038-44ef-a478-a8f3590c3eb1")
@@ -34,19 +37,105 @@ data
 ```
 
 ```{r, include=FALSE}
+#Data Preparation
+#Checking some basic characteristics of the original data like type of observations and class, to see if cleaning process is needed for my analysis
 glimpse(data)
-```
-```{r}
-#Data Cleaning Section
+unique(data$YEAR_REGISTERED)
+unique(data$YEAR_EVALUATED)
+unique(data$YEAR_BUILT)
+unique(data$PROPERTY_TYPE)
+sapply(data, class)
 
+
+#Changing the YEAR_BUILT,YEAR_EVALUATED, CONFIRMED_STOREYS, CONFIRMED_UNITS into numerical variables for further cleaning
+data$YEAR_BUILT <- as.numeric(data$YEAR_BUILT)
+class(data$YEAR_BUILT)
+data$YEAR_EVALUATED <- as.numeric(data$YEAR_EVALUATED)
+class(data$YEAR_EVALUATED)
+
+data$CONFIRMED_STOREYS <- as.numeric(data$CONFIRMED_STOREYS)
+class(data$CONFIRMED_STOREYS)
+data$CONFIRMED_UNITS <- as.numeric(data$CONFIRMED_UNITS)
+class(data$CONFIRMED_UNITS)
+
+```
+
+```{r, include=FALSE}
+#Data Cleaning Section
+data_cleaned <- data %>%
+  mutate_at(c(13:35,37,38), as.numeric)%>% 
+  #Convert variables involved in calculation of the final score into numerical variables for analysis
+  filter(!is.na(YEAR_EVALUATED), !is.na(YEAR_BUILT))%>%
+  #Removing observations that has not applicable information of time for evaluation and time built.
+  filter(CONFIRMED_STOREYS >= 3 || CONFIRMED_UNITS >= 10)%>%
+  #According  to the RentSafeTO, this program is fore Apartment Building with three or more storey or 10 or more units to comply with building maintenance standards. 
+  mutate(Building_Age_at_Evaluation = YEAR_EVALUATED - YEAR_BUILT)%>%
+#Creating a New Variable to show the building age when encountering the evaluation.
+  mutate(Distance_to_DT = sqrt((LATITUDE-43.642567)^2+(LONGITUDE+79.387054)^2)*110) %>%
+#Create a single measurement for location as distance to downtown using CN Tower (latitude = 43.642567,-79.387054) as the benchmark, transform degree to km(*110).
+  select(c(6,13,15:35,41,42))
+  
+  
+data_cleaned
+sapply(data_cleaned, class)
+summary(data_cleaned)
+colnames(data_cleaned)
 ```
 
 #Introduction
 
-hhhhhh^[This footnote will appear at the botton of the page.:https://github.com/NnnnninaW/2022-STA304-1.git]
+# Data
+
+## Data Source
+
+## Methodology and Data Collection
+
+```{r, echo=FALSE, message=FALSE }
+Mean <- lapply(data_cleaned[c(2,3)], mean)
+Standard_Deviation <- lapply(data_cleaned[c(2,3)], sd)
+cbind(Mean, Standard_Deviation) %>% 
+  knitr::kable(digits = 4)
+
+```
 
 
-#Data Source
+## Data Characteristic
+```{r, echo=FALSE}
+Score <- data_cleaned %>%  
+  ggplot(aes(x = SCORE)) +
+  geom_histogram(aes(y=..density..), bins=20, colour = "black", fill = "light yellow") + 
+   labs(title = "Toronto Apartment Building Evaluation Score Distribution Histogram",
+        x = "Evaluation Score",
+        y = "Density")+
+  geom_density()
+Score
+```
+
+
+```{r, echo=FALSE}
+ggplot(data = data_cleaned, aes(x = PROPERTY_TYPE)) +
+  geom_bar(fill = "blue", color = "black", alpha = 0.2) +
+  labs(title = "Overview of Different Property Types under Evaluation", y = "Count", x = "Property Type")
+
+```
+
+```{r, echo=FALSE}
+data_cleaned[,c(2,3,24,25)] %>% 
+  na.omit() %>% 
+  ggpairs()
+
+```
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(data_cleaned, aes(x=Building_Age_at_Evaluation, y=SCORE))+
+geom_point() +
+geom_smooth(method = lm, se = FALSE)+
+labs( x = "xx", y ="ss" )
+```
+
+
+
+
 Column	Description
 _id	
 Unique row identifier for Open Data database

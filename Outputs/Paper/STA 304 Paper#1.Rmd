@@ -133,14 +133,7 @@ geom_smooth(method = lm, se = FALSE)+
 labs( x = "xx", y ="ss" )
 ```
 
-```{r}
-full_1<- lm(SCORE ~., data = data_cleaned)
-summary(full_1)
-```
-```{r}
-alias(full_1)
-vif(full_1)
-```
+
 
 
 Column	Description
