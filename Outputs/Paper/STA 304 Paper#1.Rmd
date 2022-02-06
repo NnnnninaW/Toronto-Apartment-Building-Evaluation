@@ -1,11 +1,29 @@
 ---
-title: "STA 304 Paper 1"
+title: "Why Building Age is not Considered when Evaluating Apartment Building Safety^[Code and Data are available at:https://github.com/NnnnninaW/Toronto-Apartment-Building-Evaluation.git] "
 author: "Sijian Wu"
-date: "2/6/2022"
+date: "6 Feburary 2022"
 output: pdf_document
 abstract: "My abstract"
 bibliography: reference.bib
 ---
+
+# Table of Contents
+### 1  Introduction\
+------------------------------------------------------------------------------------------------2
+
+### 2  Data
+#### 2.1 Data Source\
+------------------------------------------------------------------------------------------------6
+
+#### 2.2 Methodology and Data Collection
+
+#### 2.3 Data Characteristics
+
+
+### Bibliography
+------------------------------------------------------------------------------------------------21
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=TRUE)
 
@@ -82,13 +100,31 @@ summary(data_cleaned)
 colnames(data_cleaned)
 ```
 
-#Introduction
+\newpage
+# Introduction
+Apartment building safety is essential for both landlords and tenant. 
+The City of Toronto ensures that tenants live in safe, well-maintained buildings through RentSafeTO: Apartment Building Standards, a bylaw enforcement program established in 2017. The program covers buildings that are three or more storey and ten or more units. There is no cost to the building owner for a City-initiated RentSafeTO building evaluation, as it is included in the registration and yearly renewal fee[@TO].
 
-# Data
 
-## Data Source
+During evaluations, Bylaw Enforcement Officers inspect common areas, mechanical and security systems, parking and exterior grounds. The bylaw enforcement officer will take notes and photographs of their inspection to upload to the City’s mobile investigation application. 
+
+
+ Staff are also onsite during audits to engage with tenants and document concerns regarding property standards within units. The building owner will also be provided with a report of the inspection findings and the building’s evaluation score. Details about the most recent building evaluation must be posted on the Tenant Notification Board. They must also be shared with all prospective tenants. Building owners must comply with the bylaws within the program or face financial penalties[@TO]. 
+
+
+
+# 2 Data
+## 2.1 Data Source
+To analyze the current status of building safety evaluation in Toronto, I utilized the Apartment Building Evaluation data[@data] from Open Data Toronto [@open]. This dataset contains building evaluation scores for buildings registered with RentSafeTO. Each item is inspected and assigned a score from one to five, with one being the lowest and five being the highest. If an item is not applicable to the building at the time of evaluation, the score will show as blank in the dataset[@data].\
+
+The overall score is determined by dividing the sum of all assigned scores of each item by 5 multiplying the number of unique items reviewed[@data]. Buildings that score 50 per cent or less on the evaluation must undergo a comprehensive inspection and audit of all common areas. On the day of the audit, bylaw enforcement officers set up a tenant engagement station to educate tenants on RentSafeTO and document concerns they may have regarding issues in their unit or common areas of their building. After the audit, investigations are opened for all service requests received[@TO].\
+
+Buildings must undergo evaluation at least once every three years. If buildings score 65 per cent or less, then the next evaluation will take place within one year. If the score is between 66 – 85 per cent, the next evaluation will take place within two years and if buildings score 86 percent and above the next evaluation with be within three years[@TO].
+
 
 ## Methodology and Data Collection
+
+## Data Characteristic
 
 ```{r, echo=FALSE, message=FALSE }
 Mean <- lapply(data_cleaned[c(2,3)], mean)
@@ -99,7 +135,7 @@ cbind(Mean, Standard_Deviation) %>%
 ```
 
 
-## Data Characteristic
+
 ```{r, echo=FALSE}
 Score <- data_cleaned %>%  
   ggplot(aes(x = SCORE)) +
@@ -133,126 +169,7 @@ geom_smooth(method = lm, se = FALSE)+
 labs( x = "xx", y ="ss" )
 ```
 
+# Reference
 
 
 
-Column	Description
-_id	
-Unique row identifier for Open Data database
-
-RSN	
-This is the ID number for a building. The registration ID can be used to identify information pertaining to buildings in different RentSafeTO Open Data Sets.
-
-YEAR_REGISTERED	
-This is the year that the building first registered with RentSafeTO.
-
-YEAR_EVALUATED	
-This represents the year of the building evaluation scores.
-
-YEAR_BUILT	
-This is the year that the building was built in. Information is provided by the Building Owners/Managers.
-
-PROPERTY_TYPE	
-This field informs users of whether a building is owed privately, by Toronto Community Housing Corporation (TCHC) or another assisted, social or supportive housing provider.
-
-WARD	
-This is the ward that the building is located in. All data is provided based on the 25 ward system.
-
-WARDNAME	
-This is the name of the ward
-
-SITE_ADDRESS	
-This is the building address.
-
-CONFIRMED_STOREYS	
-This is the number of storeys in a building.
-
-CONFIRMED_UNITS	
-This is the number of units in a building.
-
-EVALUATION_COMPLETED_ON	
-This is the date the evaluation was conducted on.
-
-SCORE	
-This is the overall score of the building. The score is the sum total of each item that was evaluated. The formula to calculate scores is as follows: sum of all assigned scores during the evaluation / (number of unique items reviewed *5)
-
-RESULTS_OF_SCORE	
-The score is used to determine whether an audit (which is a comprehensive examination of the building) takes place or whether another evaluation will be conducted in one, two or three years.
-
-NO_OF_AREAS_EVALUATED	
-This is the number of items that were evaluated during a single evaluation.
-
-ENTRANCE_LOBBY	
-This represents the condition of the entrance and/or lobby in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-ENTRANCE_DOORS_WINDOWS	
-This represents the condition of the entrance doors and windows in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-SECURITY	
-This represents the condition of the security system(s) in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-STAIRWELLS	
-This represents the condition of the stairwells in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-LAUNDRY_ROOMS	
-This represents the condition of the laundry room(s) in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-INTERNAL_GUARDS_HANDRAILS	
-This represents the condition of the internal guards and handrails in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-GARBAGE_CHUTE_ROOMS	
-This represents the condition of the garbage/chute rooms in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-GARBAGE_BIN_STORAGE_AREA	
-This represents the condition of the garbage bin storage room or outdoor enclosure area. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-ELEVATORS	
-This represents the condition of the elevator(s) in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-STORAGE_AREAS_LOCKERS	
-This represents the condition of the storage areas/lockers in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-INTERIOR_WALL_CEILING_FLOOR	
-This represents the condition of internal walls, ceilings and floors in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-INTERIOR_LIGHTING_LEVELS	
-This represents the condition of internal lighting levels in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-GRAFFITI	
-This score represents the severity of graffiti in a building. Scores range from 1 to 5, with 1 being a significant amount of graffiti and 5 being no graffiti.
-
-EXTERIOR_CLADDING	
-This represents the condition of the exterior cladding/bricks/paint, flashing and drain pipes on a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-EXTERIOR_GROUNDS	
-This represents the condition of the exterior grounds of a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-EXTERIOR_WALKWAYS	
-This represents the condition of the exterior walkways of a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-BALCONY_GUARDS	
-This represents the condition of the balcony guards on a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-WATER_PEN_EXT_BLDG_ELEMENTS	
-This represents the condition of water penetration of external elements of a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-PARKING_AREA	
-This represents the condition of the parking areas of a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-OTHER_FACILITIES	
-This represents the condition of other facilities in a building. Scores range from 1 to 5, with 1 being the lowest and 5 being the highest.
-
-GRID	
-This is the grid that the building is located in. A grid represents a specific administrative area for bylaw enforcement.
-
-LATITUDE	
-The latitude associated with the building address.
-
-LONGITUDE	
-The longitude associated with the building address.
-
-X	
-The projected X coordinate associated with the building address. The projected coordinate system is NAD27 MTM Zone 10.
-
-Y	
-The projected Y coordinate associated with the building address. The projected coordinate system is NAD27 MTM Zone 10.
