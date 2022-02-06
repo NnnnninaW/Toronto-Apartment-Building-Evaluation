@@ -9,35 +9,43 @@ bibliography: reference.bib
 
 # Table of Contents
 ### 1  Introduction\
+
 ------------------------------------------------------------------------------------------------2
+
 
 ### 2  Data
 #### 2.1 Data Source\
-------------------------------------------------------------------------------------------------6
 
-#### 2.2 Methodology and Data Collection
+------------------------------------------------------------------------------------------------2
 
-#### 2.3 Data Characteristics
+#### 2.2 Methodology and Data Collection\
+
+------------------------------------------------------------------------------------------------3
+
+#### 2.3 Data Characteristics\
+
+------------------------------------------------------------------------------------------------3
 
 
-### Bibliography
-------------------------------------------------------------------------------------------------21
+### 3 Reference
+
+------------------------------------------------------------------------------------------------71
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=TRUE)
+knitr::opts_chunk$set(echo=TRUE, fig.pos = "H")
 
 ```
 
 
-```{r, include=FALSE}
+```{r, include=FALSE, message=FALSE}
 library(opendatatoronto)
 library(dplyr)
 library(tidyverse)
 library(kableExtra)
-library(GGally)
 library(ggplot2)
-library(car)
+library(modelsummary)
+library(estimatr)
 
 # get package
 package <- show_package("4ef82789-e038-44ef-a478-a8f3590c3eb1")
@@ -63,7 +71,7 @@ unique(data$YEAR_EVALUATED)
 unique(data$YEAR_BUILT)
 unique(data$PROPERTY_TYPE)
 sapply(data, class)
-
+unique(data$WARDNAME)
 
 #Changing the YEAR_BUILT,YEAR_EVALUATED, CONFIRMED_STOREYS, CONFIRMED_UNITS into numerical variables for further cleaning
 data$YEAR_BUILT <- as.numeric(data$YEAR_BUILT)
@@ -76,63 +84,103 @@ class(data$CONFIRMED_STOREYS)
 data$CONFIRMED_UNITS <- as.numeric(data$CONFIRMED_UNITS)
 class(data$CONFIRMED_UNITS)
 
+colnames(data)
 ```
 
 ```{r, include=FALSE}
 #Data Cleaning Section
 data_cleaned <- data %>%
+   #Convert variables involved in calculation of the final score into numerical variables for analysis
   mutate_at(c(13:35,37,38), as.numeric)%>% 
-  #Convert variables involved in calculation of the final score into numerical variables for analysis
+ #Removing observations that has not applicable information of time for evaluation and time built.
   filter(!is.na(YEAR_EVALUATED), !is.na(YEAR_BUILT))%>%
-  #Removing observations that has not applicable information of time for evaluation and time built.
-  filter(CONFIRMED_STOREYS >= 3 || CONFIRMED_UNITS >= 10)%>%
   #According  to the RentSafeTO, this program is fore Apartment Building with three or more storey or 10 or more units to comply with building maintenance standards. 
+  filter(CONFIRMED_STOREYS >= 3 || CONFIRMED_UNITS >= 10)%>%
+  #Creating a New Variable to show the building age when encountering the evaluation.
   mutate(Building_Age_at_Evaluation = YEAR_EVALUATED - YEAR_BUILT)%>%
-#Creating a New Variable to show the building age when encountering the evaluation.
+  #Create a single measurement for location as distance to downtown using CN Tower (latitude = 43.642567,-79.387054) as the benchmark, transform degree to km(*110).
   mutate(Distance_to_DT = sqrt((LATITUDE-43.642567)^2+(LONGITUDE+79.387054)^2)*110) %>%
-#Create a single measurement for location as distance to downtown using CN Tower (latitude = 43.642567,-79.387054) as the benchmark, transform degree to km(*110).
-  select(c(6,13,15:35,41,42))
+  #Create a new variable that separate observations into groups by the score they have under evaluation, the group is defined by RentSafeTO's criteria of when to conduct the next evaluation
+  mutate(Score_Group = 
+           case_when(SCORE < 65 ~ "65% or Less",
+                     SCORE < 85 ~ "66%-85%",
+                     SCORE < 100  ~ "85% or Higher"
+                     ))%>%
+  #Create a new variable that separate observations into groups by the building age when conducting the evaluation using mutated variable "Building_Age_at_Evaluation"
+    mutate(Building_Age_Group = 
+           case_when(Building_Age_at_Evaluation < 30  ~ "0-30yr",
+                     Building_Age_at_Evaluation < 60 ~ "30-60yr",
+                     Building_Age_at_Evaluation < 90 ~ "60-90yr",
+                     Building_Age_at_Evaluation < 120 ~ "90-120yr",
+                     Building_Age_at_Evaluation < 220 ~ "120+yr"
+                     ))%>%
+  select(c(6,13,15:35,41,42,43,44))
   
   
 data_cleaned
 sapply(data_cleaned, class)
-summary(data_cleaned)
+summary(data_cleaned$Building_Age_at_Evaluation)
 colnames(data_cleaned)
 ```
 
 \newpage
 # Introduction
-Apartment building safety is essential for both landlords and tenant. 
-The City of Toronto ensures that tenants live in safe, well-maintained buildings through RentSafeTO: Apartment Building Standards, a bylaw enforcement program established in 2017. The program covers buildings that are three or more storey and ten or more units. There is no cost to the building owner for a City-initiated RentSafeTO building evaluation, as it is included in the registration and yearly renewal fee[@TO].
+Apartment building safety is essential for both landlords and tenants. 
+The City of Toronto ensures that tenants live in safe, well-maintained buildings through RentSafeTO: Apartment Building Standards, a bylaw enforcement program established in 2017. The program covers buildings that are three or more storeys and ten or more units[@data]. For Housing Safety Management, Housing safety awareness is crucial. Initiatives like evaluations along with effective audits and penalties are essential for provoking safety awareness for everyone. Moreover, it is necessary for programs operated by RentSafeTO to share informative results to the public. 
+
+However, there is no guarantee that the current evaluation criteria could capture all kinds of risks. Risk  could arise because of a specific hazard—an act, event, or phenomenon—posing potential harm to people or activities or things. Fire, earthquake, wind storms, flooding, toxic and allergenic materials, and terrorist attack are examples of hazards associated with buildings[@risk]. It is reasonable for building evaluation focusing on the aspect of risk resistance which is closely related to the building age problem. But, throughout my analysis, the evaluation program does not appear to have capabilities of detecting severe potential risks like construction damage, hazards resistance, and housing age problem. These factors are closely related to individuals not only from the perspective of real estate investment but also personal and public safety.
+
+The remainder sections would show that it is worth paying attention of building age problem in Toronto when evaluating apartment safety since the City of Toronto has experienced rapid urbanization like Shanghai[@shanghai]. Section 2 would present the process of analysis. Section 2.1 would introduce the background and overview of collected data. Section 2.2 would reveal the methods and data cleaning process. Section 2.3 would present results and findings in the analysis. Last Section includes all software and literature materials used for this analysis.
+
+\newpage
+# Data
+## Data Source
+To analyze the current status of building safety evaluation in Toronto, I utilized the Apartment Building Evaluation data[@data] from Open Data Toronto [@open]. This dataset contains building evaluation scores for buildings registered with RentSafeTO with individual scores for each criteria. The dataset also contains registered information of when the building is built and what property type it belongs to. However, this dataset does not provide historical scores for each observation which means that each score represents the most recent conducted evaluation. The dataset was last updated on February 5th,2022. Here is a summary of what should be expected as the average level for our analysis in terms of overall score and number of areas being evaluated in Table 1.
 
 
-During evaluations, Bylaw Enforcement Officers inspect common areas, mechanical and security systems, parking and exterior grounds. The bylaw enforcement officer will take notes and photographs of their inspection to upload to the City’s mobile investigation application. 
+```{r, echo=FALSE, message=FALSE }
+#Here is a overall summary presenting the mean and standard deviation of evaluation scores and number of items evaluated for each observation
+Mean <- lapply(data_cleaned[c(2,3)], mean)
+Standard_Deviation <- lapply(data_cleaned[c(2,3)], sd)
+table_1 <- cbind(Mean, Standard_Deviation)
+knitr::kable(table_1, digits = 4, caption = "Summary of Score and Number of Areas Evaluated")
 
-
- Staff are also onsite during audits to engage with tenants and document concerns regarding property standards within units. The building owner will also be provided with a report of the inspection findings and the building’s evaluation score. Details about the most recent building evaluation must be posted on the Tenant Notification Board. They must also be shared with all prospective tenants. Building owners must comply with the bylaws within the program or face financial penalties[@TO]. 
-
-
-
-# 2 Data
-## 2.1 Data Source
-To analyze the current status of building safety evaluation in Toronto, I utilized the Apartment Building Evaluation data[@data] from Open Data Toronto [@open]. This dataset contains building evaluation scores for buildings registered with RentSafeTO. Each item is inspected and assigned a score from one to five, with one being the lowest and five being the highest. If an item is not applicable to the building at the time of evaluation, the score will show as blank in the dataset[@data].\
-
-The overall score is determined by dividing the sum of all assigned scores of each item by 5 multiplying the number of unique items reviewed[@data]. Buildings that score 50 per cent or less on the evaluation must undergo a comprehensive inspection and audit of all common areas. On the day of the audit, bylaw enforcement officers set up a tenant engagement station to educate tenants on RentSafeTO and document concerns they may have regarding issues in their unit or common areas of their building. After the audit, investigations are opened for all service requests received[@TO].\
-
-Buildings must undergo evaluation at least once every three years. If buildings score 65 per cent or less, then the next evaluation will take place within one year. If the score is between 66 – 85 per cent, the next evaluation will take place within two years and if buildings score 86 percent and above the next evaluation with be within three years[@TO].
-
-
+```
 ## Methodology and Data Collection
+
+Under Apartment Building Evaluation by RentSafeTO, individual criteria are inspected and assigned a score from 1 to 5, with 1 being the lowest and 5 being the highest. If an item is not applicable to the building at the time of evaluation, the score will show as blank in the dataset[@data]. It is reasonable for a building to have a few unavailable examinations due to different infrastructures. Overall, we do have large enough sample size for analysis. The overall score is then determined by dividing the sum of all assigned scores of each item by 5 multiplying the number of unique items reviewed[@data].\
+
+I started my exploratory analysis by using R [@r], dplyr[@dplyr], tidyverse[@tidyverse], kableExtra[@kable], ggplot2[@ggplot2], modelsummary[@modelsummary], and estimatr[@estimatr].\
+
+After checking some basic characteristics of the original data, I changed individual score variables into numeric form for further analysis. Then, I filtered observations that should not be included since this evaluation program is for Apartment Building with three or more storey or 10 or more units to comply with building maintenance standards. Also, to study the building age problem in Toronto, I created a New Variable to show the building age when encountering the evaluation. Then, a single measurement is created or location as distance to downtown using CN Tower (latitude = 43.642567,-79.387054) as the benchmark.\
+
+According to RentSafeTO, buildings must undergo evaluation at least once every three years. If buildings score 65 per cent or less, then the next evaluation will take place within one year. If the score is between 66 – 85 per cent, the next evaluation will take place within two years and if buildings score 86 percent and above the next evaluation with be within three years[@TO]. So I created a new variable that separate observations into groups by this score criteria. To see if Toronto housing really has a building age problem, I created a new variable that separate observations into groups by the building age when conducting the evaluation.\
+
+There are three types of property included: private, Toronto Community Housing Corporation (TCHC) or social housing[@data]. Table 2 provides an overview of the cleaned dataset grouping by property type with changes mentioned above.
+
+
+
+```{r, echo=FALSE, message=FALSE}
+
+table <- datasummary_balance(formula = ~PROPERTY_TYPE,
+                    data = data_cleaned,
+                    title = "Descriptive Statistics for Results of Evaluation Grouping by Property Types",
+                    notes = "Data Source: Open Data Toronto",
+                    dinm=FALSE)
+landscape(table, margin = NULL)
+```
+
+
 
 ## Data Characteristic
 
-```{r, echo=FALSE, message=FALSE }
-Mean <- lapply(data_cleaned[c(2,3)], mean)
-Standard_Deviation <- lapply(data_cleaned[c(2,3)], sd)
-cbind(Mean, Standard_Deviation) %>% 
-  knitr::kable(digits = 4)
 
+```{r, echo=FALSE}
+data_cleaned %>%
+  datasummary_skim(type = "categorical",
+                   title = "Summary of Property Type and Score Group under RentSafeTO for Evaluation")
 ```
+
 
 
 
@@ -146,21 +194,40 @@ Score <- data_cleaned %>%
   geom_density()
 Score
 ```
+\begin{center} 
+
+Figure 1: Toronto Apartment Building Evaluation Score Distribution Histogram
+
+\end{center}
+
+
+
+
 
 
 ```{r, echo=FALSE}
-ggplot(data = data_cleaned, aes(x = PROPERTY_TYPE)) +
-  geom_bar(fill = "blue", color = "black", alpha = 0.2) +
-  labs(title = "Overview of Different Property Types under Evaluation", y = "Count", x = "Property Type")
+data_cleaned %>% 
+  ggplot(mapping = aes(x = Score_Group, fill = PROPERTY_TYPE)) +
+  labs(title = "Toronto Apartment Building Evaluation Score by Property Type",
+        x = "Score Group",
+        y = "Count") +
+  geom_bar()
+```
+\begin{center} 
 
+Figure 2: Toronto Apartment Building Evaluation Score Distribution by Property Type
+
+\end{center}
+
+```{r}
+data_cleaned %>% 
+  ggplot(mapping = aes(x = Building_Age_Group)) + 
+   labs(title = "Toronto Apartment Building Evaluation Score Distribution Histogram",
+        x = "Building Age Group",
+        y = "Count") +
+  geom_bar(fill = "blue", color = "black")
 ```
 
-```{r, echo=FALSE}
-data_cleaned[,c(2,3,24,25)] %>% 
-  na.omit() %>% 
-  ggpairs()
-
-```
 
 ```{r, echo=FALSE, message=FALSE}
 ggplot(data_cleaned, aes(x=Building_Age_at_Evaluation, y=SCORE))+
