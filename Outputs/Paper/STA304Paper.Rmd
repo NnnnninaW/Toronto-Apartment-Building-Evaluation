@@ -1,22 +1,22 @@
 ---
-title: "Building Age should be Considered when Evaluating Apartment Building Safety^[Code and Data are available at:https://github.com/NnnnninaW/Toronto-Apartment-Building-Evaluation.git] "
+title: "Shouldn't Building Age be Considered when Evaluating Apartment Building Safety^[Code and Data are available at:https://github.com/NnnnninaW/Toronto-Apartment-Building-Evaluation.git] "
 author: "Sijian Wu"
 date: "6 Feburary 2022"
 output: pdf_document
-abstract: "My abstract"
+abstract: "Apartment building safety is essential for both landlords and tenants. Dataset of Apartment Building Evaluation from Open Data Toronto to analyze the current status of building safety evaluation which does not appear to have capabilities of detecting severe potential risks like construction damage, hazards resistance, and housing age problem. Through aging, any facility may experience progressive growth of risk, due to deterioration of building materials or other natural physical forces.  To provoke safety awareness for everyone, expanding the diversity and coverage of building safety evaluation is necessary as next step for our city."
 bibliography: reference.bib
 ---
 
 # Table of Contents
 ### 1  Introduction\
 
-------------------------------------------------------------------------------------------------2
+--------------------------------------------------------------------------------------------------2
 
 
 ### 2  Data
 #### 2.1 Data Source\
 
-------------------------------------------------------------------------------------------------2
+------------------------------------------------------------------------------------------------3
 
 #### 2.2 Methodology and Data Collection\
 
@@ -28,11 +28,11 @@ bibliography: reference.bib
 
 ### 3 Limitations and Conclusion\
 
-------------------------------------------------------------------------------------------------71
+------------------------------------------------------------------------------------------------9
 
 ### 4 Reference
 
-------------------------------------------------------------------------------------------------71
+------------------------------------------------------------------------------------------------10
 
 
 ```{r setup, include=FALSE}
@@ -49,7 +49,7 @@ library(kableExtra)
 library(ggplot2)
 library(modelsummary)
 library(estimatr)
-library(ggpubr)
+
 
 data <- read.csv("/Users/nina/Desktop/304 Paper1/Toronto-Apartment-Building-Evaluation/Inputs/DATA/Apartment Building Evaluation.csv")
 data
@@ -249,12 +249,18 @@ labs( x = "Building Age at Evaluation", y ="SCORE" )
 ```
 \begin{center} 
 
-Figure 4: Scatterplot with Fitted Regression Line of Score ~ Building Age
+Figure 4: Scatterplot with Fitted Regression Line between Score and Building Age
 
 \end{center}
 
 
 # 3 Limitations and Conclusion
+One of the limitations of the analysis conducted is that Condo buildings, townhomes, or units in a private home (basement or main floor apartment) are not part of the RentSafeTO program[@TO]. This would imply that our results is not appropriate for generalization to a larger population. Also, the relation we discovered between the safety score and building age may not be appropriate as Linear regression may not be the best model to fit. 
+
+Under current regulation system, buildings that score 50 per cent or less on the evaluation must undergo a comprehensive inspection and audit of all common areas. After the audit, investigations are opened for all service requests received. In addition, details about the most recent building evaluation must be posted on the Tenant Notification Board. They must also be shared with all prospective tenants[@TO]. 
+
+However, to better provoke the awareness of housing safety, it is necessary for the government to develop a more completed evaluation system that incorporates risks associated with building age. Through aging, any facility may experience progressive growth of risk, due to deterioration of building materials or other natural physical forces. In addition, the coverage of the evaluation program is very limited. RentSafeTO should attempt to expand the coverage while diversify evaluation criteria for different property types. United criteria is not appropriate for every property type which may cause errors in evaluation. Impacts from architecture structures should also be analyzed to see if it should be considered when evaluating building safety as next step.
+
 
 \newpage
 # Reference

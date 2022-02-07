@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.2.6)  6 FEB 2022 21:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.2.6)  6 FEB 2022 21:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -585,16 +585,16 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 113.
 
-Underfull \hbox (badness 10000) in paragraph at lines 122--122
+Underfull \hbox (badness 10000) in paragraph at lines 131--131
 
  []
 
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 122.
+(hyperref)                than one, level fixed on input line 131.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 149--149
+Underfull \hbox (badness 10000) in paragraph at lines 158--158
 
  []
 
@@ -602,44 +602,44 @@ Underfull \hbox (badness 10000) in paragraph at lines 149--149
 
 {/Users/nina/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 223.
+(Font)              <7> on input line 232.
 
-Underfull \hbox (badness 10000) in paragraph at lines 238--247
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 253--263
+Underfull \hbox (badness 10000) in paragraph at lines 247--256
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 264--274
+Underfull \hbox (badness 10000) in paragraph at lines 262--272
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 273--283
 
  []
 
 [3pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.280 \begin{landscape}
+l.289 \begin{landscape}
                        \begin{table}]
 
-LaTeX Warning: Float too large for page by 25.71667pt on input line 328.
+LaTeX Warning: Float too large for page by 25.71667pt on input line 337.
 
 [4pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.329 \end{landscape}
+l.338 \end{landscape}
                      ]
 <STA304Paper_files/figure-latex/unnamed-chunk-7-1.pdf, id=97, 469.755pt x 325.215pt>
 File: STA304Paper_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 <use STA304Paper_files/figure-latex/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: STA304Paper_files/figure-latex/unnamed-chunk-7-1.pdf  used on input line 370.
+Package pdftex.def Info: STA304Paper_files/figure-latex/unnamed-chunk-7-1.pdf  used on input line 379.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [5pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.372 \begin{center}
+l.381 \begin{center}
                     
 
 
@@ -647,22 +647,22 @@ l.372 \begin{center}
 <STA304Paper_files/figure-latex/unnamed-chunk-8-1.pdf, id=106, 469.755pt x 325.215pt>
 File: STA304Paper_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
 <use STA304Paper_files/figure-latex/unnamed-chunk-8-1.pdf>
-Package pdftex.def Info: STA304Paper_files/figure-latex/unnamed-chunk-8-1.pdf  used on input line 389.
+Package pdftex.def Info: STA304Paper_files/figure-latex/unnamed-chunk-8-1.pdf  used on input line 398.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [6 <./STA304Paper_files/figure-latex/unnamed-chunk-7-1.pdf>]
 <STA304Paper_files/figure-latex/unnamed-chunk-9-1.pdf, id=116, 469.755pt x 325.215pt>
 File: STA304Paper_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
 <use STA304Paper_files/figure-latex/unnamed-chunk-9-1.pdf>
-Package pdftex.def Info: STA304Paper_files/figure-latex/unnamed-chunk-9-1.pdf  used on input line 405.
+Package pdftex.def Info: STA304Paper_files/figure-latex/unnamed-chunk-9-1.pdf  used on input line 414.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [7 <./STA304Paper_files/figure-latex/unnamed-chunk-8-1.pdf>]
 <STA304Paper_files/figure-latex/unnamed-chunk-10-1.pdf, id=127, 469.755pt x 325.215pt>
 File: STA304Paper_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
 <use STA304Paper_files/figure-latex/unnamed-chunk-10-1.pdf>
-Package pdftex.def Info: STA304Paper_files/figure-latex/unnamed-chunk-10-1.pdf  used on input line 433.
+Package pdftex.def Info: STA304Paper_files/figure-latex/unnamed-chunk-10-1.pdf  used on input line 442.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [8 <./STA304Paper_files/figure-latex/unnamed-chunk-9-1.pdf>] [9 <./STA304Paper_files/figure-latex/unnamed-chunk-10-1.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 495--499
+Underfull \hbox (badness 10000) in paragraph at lines 533--537
 \T1/lmr/m/n/10 toronto . ca / community -[] people / housing -[] shelter / rental -[] housing -[] tenant -[] information / rental -[] housing -[]
  []
 
@@ -673,13 +673,13 @@ Package rerunfilecheck Info: File `STA304Paper.out' has not changed.
 Here is how much of TeX's memory you used:
  14820 strings out of 480238
  269381 string characters out of 5895173
- 554639 words of memory out of 5000000
+ 554657 words of memory out of 5000000
  32461 multiletter control sequences out of 15000+600000
  535662 words of font info for 79 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  70i,10n,79p,291b,805s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/nina/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Users/nina/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/nina/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/nina/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb></Users/nina/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb>
-Output written on STA304Paper.pdf (10 pages, 1107223 bytes).
+Output written on STA304Paper.pdf (10 pages, 1114224 bytes).
 PDF statistics:
  259 PDF objects out of 1000 (max. 8388607)
  212 compressed objects within 3 object streams
